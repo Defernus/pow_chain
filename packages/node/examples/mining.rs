@@ -26,7 +26,7 @@ fn mine_block(cfg: &Config, node: &mut Node, data: String) {
     let end_time = SystemTime::now();
 
     println!(
-        "mined block:\n\ttime {:?}\n\tnonce {}\n\tdifficulty: {}",
+        "block mined:\n\ttime {:?}\n\tnonce {}\n\tdifficulty: {}",
         end_time.duration_since(start_time).unwrap(),
         nonce,
         current_difficulty,
