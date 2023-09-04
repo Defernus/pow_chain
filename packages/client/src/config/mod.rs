@@ -5,8 +5,8 @@ use pow_chain_core::{
 };
 
 pub struct Config {
-    pub secret: String,
-    pub port: u16,
+    pub node_host: String,
+    pub node_port: u16,
 }
 
 impl Config {
@@ -14,8 +14,8 @@ impl Config {
         dotenv().unwrap();
 
         Self {
-            secret: read_env("NODE_SECRET"),
-            port: read_optional_env("NODE_PORT").unwrap_or(DEFAULT_NODE_PORT),
+            node_host: read_env("NODE_HOST"),
+            node_port: read_optional_env("NODE_PORT").unwrap_or(DEFAULT_NODE_PORT),
         }
     }
 }
