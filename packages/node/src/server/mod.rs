@@ -16,9 +16,9 @@ use crate::{
 };
 
 pub mod error;
-pub(self) mod helpers;
+mod helpers;
 pub mod responses;
-pub(self) mod router;
+mod router;
 
 pub struct Server {
     cfg: Arc<Config>,
