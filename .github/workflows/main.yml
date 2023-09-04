@@ -21,13 +21,16 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          components: rustfmt, clippy, cargo-audit, cargo-make
+          components: rustfmt, clippy
           profile: minimal
           override: true
 
       # selecting a toolchain should happen before the plugin, as the cache uses the current rustc version as its cache key
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo make
+        uses: davidB/rust-cargo-make@v1
 
       - name: Format
         run: cargo make fmt
@@ -39,4 +42,6 @@ jobs:
         run: cargo make test
 
       - name: Audit dependencies
-        run: cargo make audit
+        run: |
+          cargo install --locked cargo-audit
+          cargo make audit
