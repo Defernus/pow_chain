@@ -6,11 +6,10 @@ use pow_core::{
         DEFAULT_BLOCK_DURATION_SEC, DEFAULT_DIFFICULTY_UPDATE_CAP, DEFAULT_MAX_BODY_SIZE,
         DEFAULT_MAX_CONNECTIONS, DEFAULT_NODE_PORT, DEFAULT_UPDATE_DIFFICULTY_INTERVAL,
     },
-    env::{read_env, read_optional_env},
+    env::read_optional_env,
 };
 
 pub struct Config {
-    pub secret: String,
     pub port: u16,
     pub max_connections: usize,
     pub max_body_size: usize,
@@ -24,7 +23,6 @@ impl Config {
         dotenv().unwrap();
 
         Self {
-            secret: read_env("NODE_SECRET"),
             port: read_optional_env("NODE_PORT").unwrap_or(DEFAULT_NODE_PORT),
             max_connections: read_optional_env("NODE_MAX_CONNECTIONS")
                 .unwrap_or(DEFAULT_MAX_CONNECTIONS),

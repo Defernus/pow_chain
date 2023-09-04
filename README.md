@@ -40,6 +40,13 @@ Run client:
 cargo run --bin pow_client
 ```
 
+## Examples
+
+- Simple block mining example without TCP server:
+  ```
+  cargo run --example mining
+  ```
+
 ## License
 
 This project is distributed under the terms of both the MIT license and the Apache License (Version 2.0).
