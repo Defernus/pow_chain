@@ -9,3 +9,4 @@ keywords = { workspace = true }
 
 [dependencies]
 dotenv = { workspace = true }
+env_logger = { workspace = true }

@@ -18,12 +18,26 @@ Rul all tests with:
 cargo make test
 ```
 
-## Examples
+## Run in docker
 
 Run one node and one client:
 
 ```bash
 docker-compose -f docker-compose.example.yml up --build --force-recreate --remove-orphans
+```
+
+## Run locally
+
+Run node:
+
+```bash
+cargo run --bin pow_chain_node
+```
+
+Run client:
+
+```bash
+cargo run --bin pow_chain_client
 ```
 
 ## License

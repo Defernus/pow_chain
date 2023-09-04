@@ -9,5 +9,7 @@ keywords = { workspace = true }
 
 [dependencies]
 dotenv = { workspace = true }
+tokio = { workspace = true }
+log = { workspace = true }
 
 pow_chain_core = { workspace = true }
