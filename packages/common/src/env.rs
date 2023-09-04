@@ -20,7 +20,9 @@ where
 {
     let key = key.to_string();
 
-    dotenv::var(&key)
-        .ok()
-        .map(|value| value.parse().unwrap_or_else(|_| panic!("failed to parse {key}")))
+    dotenv::var(&key).ok().map(|value| {
+        value
+            .parse()
+            .unwrap_or_else(|_| panic!("failed to parse {key}"))
+    })
 }
