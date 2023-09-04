@@ -1,10 +1,11 @@
+use serde::{Deserialize, Serialize};
 use std::time::{Duration, SystemTime};
 
 use pow_core::hash::{hash_block_data, validate_hash};
 
 use super::error::{NodeError, NodeResult};
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Deserialize, Serialize)]
 pub struct Block {
     /// Text data of the block
     pub data: String,

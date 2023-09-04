@@ -11,6 +11,7 @@ keywords = ["blockchain", "pow", "prof of work"]
 
 [workspace.dependencies]
 serde = { version = "1.0.188", default-features = false, features = ["derive"] }
+serde_json = "1.0.105"
 dotenv = "0.15.0"
 tokio = { version = "1.32.0", features = ["full"] }
 log = "0.4"

@@ -39,11 +39,15 @@ impl Node {
         self.blocks.last().unwrap()
     }
 
+    pub fn get_height(&self) -> usize {
+        self.blocks.len() - 1
+    }
+
     pub fn get_difficulty(&self) -> f64 {
         self.difficulty
     }
 
-    pub fn add_block(&mut self, cfg: &Config, data: String, nonce: u64) -> NodeResult<()> {
+    pub fn add_block(&mut self, cfg: &Config, data: String, nonce: u64) -> NodeResult<&Block> {
         let prev_block_height = self.blocks.len() - 1;
         let prev_block = self.get_block(prev_block_height)?;
 
@@ -55,7 +59,7 @@ impl Node {
 
         self.blocks.push(block);
 
-        Ok(())
+        Ok(self.get_highest_block())
     }
 
     pub fn update_difficulty(&mut self, cfg: &Config) {
@@ -77,5 +81,13 @@ impl Node {
         let min_difficulty = self.difficulty / cfg.difficulty_update_cap;
 
         self.difficulty = new_difficulty.clamp(min_difficulty, max_difficulty);
+    }
+
+    pub fn store_blocks(&self) -> NodeResult<()> {
+        todo!()
+    }
+
+    pub fn load_blocks(_path: &str) -> NodeResult<Self> {
+        todo!()
     }
 }

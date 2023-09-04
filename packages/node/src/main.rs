@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use pow_core::update_log_level::update_log_level;
-use pow_node::{config::Config, server::Server};
+use pow_node::{config::Config, node::Node, server::Server};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -9,9 +9,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     update_log_level();
 
-    let mut server = Server::new(&cfg).await?;
+    let node = Node::new("Initial block");
 
-    server.listen(&cfg).await?;
+    let mut server = Server::new(cfg, node).await?;
+
+    server.listen().await?;
 
     Ok(())
 }

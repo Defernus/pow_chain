@@ -4,15 +4,19 @@ use tokio::{io::AsyncWriteExt, net::TcpStream, sync::Mutex};
 
 use crate::config::Config;
 
+use super::error::ServerError;
+
 pub async fn send_err(
     socket: Arc<Mutex<TcpStream>>,
-    err: impl Display,
+    err: ServerError,
 ) -> Result<(), Box<dyn Error>> {
     let mut lock = socket.lock().await;
     let socket = lock.borrow_mut();
 
+    let err = serde_json::to_string(&err).unwrap();
+
     socket
-        .write_all(format!("ERROR\n{err}\n").as_bytes())
+        .write_all(format!("ERROR\n{}\n", err).as_bytes())
         .await?;
     socket.flush().await?;
 
@@ -46,7 +50,7 @@ pub async fn add_connection(
     if cfg.max_connections != 0 && *c > cfg.max_connections {
         log::warn!("max connections reached");
 
-        send_err(socket.clone(), "max connections reached").await?;
+        send_err(socket.clone(), ServerError::MaxConnectionsReached).await?;
         socket.lock().await.borrow_mut().shutdown().await?;
 
         return Ok(true);

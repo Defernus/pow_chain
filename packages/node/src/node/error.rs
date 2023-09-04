@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Deserialize, Serialize)]
 pub enum NodeError {
     /// Block with given height not found
     BlockNotFound,
@@ -19,3 +21,14 @@ pub enum NodeError {
 }
 
 pub type NodeResult<T> = Result<T, NodeError>;
+
+impl From<NodeError> for String {
+    fn from(err: NodeError) -> Self {
+        match err {
+            NodeError::BlockNotFound => "block not found".to_string(),
+            NodeError::FirstBlockAlreadyExists => "first block already exists".to_string(),
+            NodeError::InvalidDifficulty => "invalid difficulty".to_string(),
+            NodeError::InvalidTimeFromRoot => "invalid time from root".to_string(),
+        }
+    }
+}
