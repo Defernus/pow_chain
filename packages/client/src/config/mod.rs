@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use pow_common::{
     constants::{DEFAULT_HIGHEST_BLOCK_REFRESH_MS, DEFAULT_NODE_PORT},
     env::{read_env, read_optional_env},

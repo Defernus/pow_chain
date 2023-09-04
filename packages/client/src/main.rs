@@ -122,7 +122,9 @@ pub fn main() {
         send_data(&mut socket, &msg);
         match read_highest_block(&mut socket) {
             Ok(block) => {
-                log::info!("block mined:\n\t{block:?}");
+                log::debug!("block mined:\n\t{block:?}");
+
+                log::info!("FOUND WORD OF WISDOM: {}", block.block.wow);
                 last_block = Some(block);
             }
             Err(ServerError::NodeError(NodeError::InvalidDifficulty)) => {

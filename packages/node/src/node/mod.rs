@@ -51,7 +51,8 @@ impl Node {
         let prev_block_height = self.blocks.len() - 1;
         let prev_block = self.get_block(prev_block_height)?;
 
-        let block = prev_block.validate_next_block(self.difficulty, self.root_time, data, nonce)?;
+        let block =
+            prev_block.validate_next_block(cfg, self.difficulty, self.root_time, data, nonce)?;
 
         if (prev_block_height + 1) as u64 % cfg.update_difficulty_interval == 0 {
             self.update_difficulty(cfg);

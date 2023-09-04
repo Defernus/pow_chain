@@ -1,12 +1,12 @@
 use std::time::Duration;
 
-use dotenv::dotenv;
+use dotenvy::dotenv;
 use pow_common::{
     constants::{
         DEFAULT_BLOCK_DURATION_SEC, DEFAULT_DIFFICULTY_UPDATE_CAP, DEFAULT_MAX_BODY_SIZE,
         DEFAULT_MAX_CONNECTIONS, DEFAULT_NODE_PORT, DEFAULT_UPDATE_DIFFICULTY_INTERVAL,
     },
-    env::read_optional_env,
+    env::{read_env, read_optional_env},
 };
 
 pub struct Config {
@@ -16,6 +16,7 @@ pub struct Config {
     pub target_block_duration: Duration,
     pub update_difficulty_interval: u64,
     pub difficulty_update_cap: f64,
+    pub words_of_wisdom: Vec<String>,
 }
 
 impl Config {
@@ -35,6 +36,17 @@ impl Config {
                 .unwrap_or(DEFAULT_UPDATE_DIFFICULTY_INTERVAL),
             difficulty_update_cap: read_optional_env("UPDATE_DIFFICULTY_CAP")
                 .unwrap_or(DEFAULT_DIFFICULTY_UPDATE_CAP),
+            words_of_wisdom: read_env::<String, _>("WORDS_OF_WISDOM")
+                .split('\n')
+                .map(String::from)
+                .filter(|s| !s.is_empty())
+                .collect(),
         }
+    }
+
+    /// returns a random word of wisdom
+    pub fn get_word_of_wisdom(&self) -> String {
+        let index = rand::random::<usize>() % self.words_of_wisdom.len();
+        self.words_of_wisdom[index].clone()
     }
 }

@@ -58,9 +58,6 @@ impl Router {
             return false;
         };
 
-        // wait 1 second
-        tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
-
         match command.as_str() {
             ROUTE_GET_BLOCK => resp(self.socket.clone(), self.route_get_block().await).await,
             ROUTE_GET_DIFFICULTY => {

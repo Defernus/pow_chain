@@ -12,12 +12,13 @@ keywords = ["blockchain", "pow", "prof of work"]
 [workspace.dependencies]
 serde = { version = "1.0.188", default-features = false, features = ["derive"] }
 serde_json = "1.0.105"
-dotenv = "0.15.0"
+dotenvy = "0.15.0"
 tokio = { version = "1.32.0", features = ["full"] }
 log = "0.4"
 env_logger = "0.10.0"
 sha256 = "1.4.0"
 hex = "0.4.3"
+rand = "0.8.5"
 
 pow_common = { version = "0.0.1", path = "./packages/common" }
 pow_tests = { version = "0.0.1", path = "./packages/tests" }

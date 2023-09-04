@@ -3,6 +3,8 @@ use std::time::{Duration, SystemTime};
 
 use pow_common::hash::{hash_block_data, validate_hash};
 
+use crate::config::Config;
+
 use super::error::{NodeError, NodeResult};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Deserialize, Serialize)]
@@ -15,6 +17,8 @@ pub struct Block {
     pub prev_hash: String,
     /// An artificially generated number used as a counter during the mining process
     pub nonce: u64,
+    /// Word of wisdom: provided as a mining reward
+    pub wow: String,
 }
 
 impl Block {
@@ -24,11 +28,13 @@ impl Block {
             time_from_root: Duration::from_secs(0),
             prev_hash: String::new(),
             nonce: 0,
+            wow: String::from("Hello, World!"),
         }
     }
 
     pub fn validate_next_block(
         &self,
+        cfg: &Config,
         difficulty: f64,
         root_time: SystemTime,
         data: String,
@@ -47,6 +53,7 @@ impl Block {
         }
 
         Ok(Block {
+            wow: cfg.get_word_of_wisdom(),
             data,
             nonce,
             prev_hash,
