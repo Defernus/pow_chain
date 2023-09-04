@@ -8,9 +8,6 @@ use super::error::{NodeError, NodeResult};
 pub struct Block {
     /// Text data of the block
     pub data: String,
-    /// Block height. Height of the first block is 0, height of the next block
-    /// is 1 more than previous block
-    pub height: u64,
     /// Time from the root block
     pub time_from_root: Duration,
     /// Hash of the previous block
@@ -23,7 +20,6 @@ impl Block {
     pub fn first_block(data: String) -> Self {
         Self {
             data,
-            height: 0,
             time_from_root: Duration::from_secs(0),
             prev_hash: String::new(),
             nonce: 0,
@@ -51,7 +47,6 @@ impl Block {
 
         Ok(Block {
             data,
-            height: self.height + 1,
             nonce,
             prev_hash,
             time_from_root,
