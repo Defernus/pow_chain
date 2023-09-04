@@ -28,24 +28,28 @@ docker-compose -f docker-compose.example.yml up --build --force-recreate --remov
 
 ## Run locally
 
-Run node:
-
-```bash
-cargo run --bin pow_node
-```
-
-Run client:
-
-```bash
-cargo run --bin pow_client
-```
+- Run node:
+  ```bash
+  cargo run --bin pow_node
+  ```
+- Run client:
+  ```bash
+  cargo run --bin pow_client
+  ```
 
 ## Examples
 
-- Simple block mining example without TCP server:
-  ```
-  cargo run --example mining
-  ```
+Run examples:
+
+```
+cargo run --example <example name>
+```
+
+For example:
+
+```
+cargo run --example mining
+```
 
 ## License
 
