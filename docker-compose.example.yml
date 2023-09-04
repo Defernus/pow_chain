@@ -2,11 +2,15 @@ version: "3.8"
 
 services:
   node:
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: ./packages/node/Dockerfile
 
   client:
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: ./packages/client/Dockerfile
