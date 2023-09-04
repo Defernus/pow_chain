@@ -1,0 +1,30 @@
+[workspace]
+members = ["packages/common", "packages/node", "packages/client", "tests"]
+
+[workspace.package]
+version = "0.0.1"
+authors = ["Denis Lavrentev"]
+license = "GPL-3.0-or-later"
+edition = "2021"
+repository = "https://github.com/defernus/pow_chain"
+keywords = ["blockchain", "pow", "prof of work"]
+
+[workspace.dependencies]
+serde = { version = "1.0.188", default-features = false, features = ["derive"] }
+
+pow_chain_core = { version = "0.0.1", path = "./packages/common" }
+pow_chain_tests = { version = "0.0.1", path = "./packages/tests" }
+pow_chain_node = { version = "0.0.1", path = "./packages/node" }
+pow_chain_client = { version = "0.0.1", path = "./packages/client" }
+
+
+[profile.release]
+codegen-units = 1
+debug = false
+debug-assertions = false
+incremental = false
+lto = true
+overflow-checks = true
+opt-level = 3
+panic = "abort"
+rpath = false

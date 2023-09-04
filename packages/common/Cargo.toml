@@ -1,0 +1,11 @@
+[package]
+name = "pow_chain_core"
+version = { workspace = true }
+authors = { workspace = true }
+license = { workspace = true }
+edition = { workspace = true }
+repository = { workspace = true }
+keywords = { workspace = true }
+
+[dependencies]
+serde = { workspace = true }

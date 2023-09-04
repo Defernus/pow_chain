@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: ./packages/node/Dockerfile
+
+  client:
+    build:
+      context: .
+      dockerfile: ./packages/client/Dockerfile
