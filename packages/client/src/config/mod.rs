@@ -13,8 +13,8 @@ pub struct Config {
     pub highest_block_refresh: Duration,
 }
 
-impl Config {
-    pub fn new() -> Self {
+impl Default for Config {
+    fn default() -> Self {
         dotenv().unwrap();
 
         Self {

@@ -19,8 +19,8 @@ pub struct Config {
     pub words_of_wisdom: Vec<String>,
 }
 
-impl Config {
-    pub fn new() -> Self {
+impl Default for Config {
+    fn default() -> Self {
         dotenv().unwrap();
 
         Self {
@@ -43,7 +43,9 @@ impl Config {
                 .collect(),
         }
     }
+}
 
+impl Config {
     /// returns a random word of wisdom
     pub fn get_word_of_wisdom(&self) -> String {
         let index = rand::random::<usize>() % self.words_of_wisdom.len();

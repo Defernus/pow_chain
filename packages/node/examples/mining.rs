@@ -34,7 +34,7 @@ fn mine_block(cfg: &Config, node: &mut Node, data: String) {
 }
 
 fn main() {
-    let cfg = Config::new();
+    let cfg = Config::default();
     let mut node = Node::new("test node");
 
     log::info!("start mining");

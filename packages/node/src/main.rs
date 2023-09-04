@@ -5,7 +5,7 @@ use pow_node::{config::Config, node::Node, server::Server};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let cfg = Config::new();
+    let cfg = Config::default();
 
     update_log_level();
 

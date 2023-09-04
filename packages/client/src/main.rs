@@ -13,7 +13,7 @@ use pow_node::server::responses::HighestBlockResponse;
 const BUFFER_SIZE: usize = 1024;
 
 fn send_data(socket: &mut TcpStream, data: &str) {
-    socket.write_all(format!("{data}").as_bytes()).unwrap();
+    socket.write_all(data.to_string().as_bytes()).unwrap();
     socket.flush().unwrap();
 }
 
@@ -95,7 +95,7 @@ fn mine_block(
 }
 
 pub fn main() {
-    let cfg = Config::new();
+    let cfg = Config::default();
 
     update_log_level();
 
