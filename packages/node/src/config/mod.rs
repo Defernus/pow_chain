@@ -21,7 +21,9 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        dotenv().unwrap();
+        if dotenv().is_err() {
+            log::warn!("no .env file found");
+        }
 
         Self {
             port: read_optional_env("NODE_PORT").unwrap_or(DEFAULT_NODE_PORT),

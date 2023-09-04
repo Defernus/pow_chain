@@ -15,7 +15,9 @@ pub struct Config {
 
 impl Default for Config {
     fn default() -> Self {
-        dotenv().unwrap();
+        if dotenv().is_err() {
+            log::warn!("no .env file found");
+        }
 
         Self {
             name: read_env("CLIENT_NAME"),
