@@ -8,9 +8,9 @@ where
     let key = key.to_string();
 
     dotenv::var(&key)
-        .expect(&format!("failed to read {key}"))
+        .unwrap_or_else(|_| panic!("failed to read {key}"))
         .parse()
-        .expect(&format!("failed to parse {key}"))
+        .unwrap_or_else(|_| panic!("failed to parse {key}"))
 }
 
 pub fn read_optional_env<F, E>(key: impl ToString) -> Option<F>
@@ -22,5 +22,5 @@ where
 
     dotenv::var(&key)
         .ok()
-        .map(|value| value.parse().expect(&format!("failed to parse {key}")))
+        .map(|value| value.parse().unwrap_or_else(|_| panic!("failed to parse {key}")))
 }
