@@ -59,18 +59,20 @@ fn mine_block(
     let mut highest_block = last_block.unwrap_or_else(|| get_highest_block(socket).unwrap());
 
     let start_time = SystemTime::now();
+    let mut last_update = start_time;
 
     let prev_hash = highest_block.block.hash();
 
     loop {
         // refresh highest block
-        if SystemTime::now().duration_since(start_time).unwrap() > block_refresh {
+        if SystemTime::now().duration_since(last_update).unwrap() > block_refresh {
             let new_block = get_highest_block(socket).unwrap();
 
             if new_block.height != highest_block.height {
                 highest_block = new_block;
                 nonce = 0;
             }
+            last_update = SystemTime::now();
         }
 
         let hash = hash_block_data(data, &prev_hash, nonce);
