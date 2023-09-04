@@ -5,4 +5,4 @@ COPY . .
 
 RUN cargo install --path ./packages/node
 
-CMD ["pow_chain_node"]
+CMD ["pow_node"]

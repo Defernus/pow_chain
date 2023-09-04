@@ -15,11 +15,13 @@ dotenv = "0.15.0"
 tokio = { version = "1.32.0", features = ["full"] }
 log = "0.4"
 env_logger = "0.10.0"
+sha256 = "1.4.0"
+hex = "0.4.3"
 
-pow_chain_core = { version = "0.0.1", path = "./packages/common" }
-pow_chain_tests = { version = "0.0.1", path = "./packages/tests" }
-pow_chain_node = { version = "0.0.1", path = "./packages/node" }
-pow_chain_client = { version = "0.0.1", path = "./packages/client" }
+pow_core = { version = "0.0.1", path = "./packages/common" }
+pow_tests = { version = "0.0.1", path = "./packages/tests" }
+pow_node = { version = "0.0.1", path = "./packages/node" }
+pow_client = { version = "0.0.1", path = "./packages/client" }
 
 
 [profile.release]

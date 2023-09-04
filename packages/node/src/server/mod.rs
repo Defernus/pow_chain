@@ -24,6 +24,8 @@ impl Server {
 
     // TODO add graceful shutdown
     pub async fn listen(&mut self, cfg: &Config) -> Result<Self, Box<dyn Error>> {
+        log::info!("listening on: {}", self.listener.local_addr()?);
+
         let connections: Arc<Mutex<usize>> = Arc::new(Mutex::new(0));
 
         loop {
@@ -66,6 +68,7 @@ impl Server {
                     }
 
                     let body = String::from_utf8_lossy(&buf[..size]).to_string();
+                    let lines = body.split('\n').collect::<Vec<_>>();
 
                     send_response(&mut socket, body).await.unwrap();
                 }

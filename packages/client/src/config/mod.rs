@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use pow_chain_core::{
+use pow_core::{
     constants::DEFAULT_NODE_PORT,
     env::{read_env, read_optional_env},
 };

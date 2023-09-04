@@ -8,7 +8,7 @@ args = [
   "--release",
   "--locked",
   "--exclude",
-  "pow_chain_tests",
+  "pow_tests",
   "--workspace",
 ]
 

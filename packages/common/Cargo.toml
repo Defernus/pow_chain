@@ -1,5 +1,5 @@
 [package]
-name = "pow_chain_core"
+name = "pow_core"
 version = { workspace = true }
 authors = { workspace = true }
 license = { workspace = true }
@@ -10,3 +10,5 @@ keywords = { workspace = true }
 [dependencies]
 dotenv = { workspace = true }
 env_logger = { workspace = true }
+sha256 = { workspace = true }
+hex = { workspace = true }

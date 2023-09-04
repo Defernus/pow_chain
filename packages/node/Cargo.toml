@@ -1,5 +1,5 @@
 [package]
-name = "pow_chain_node"
+name = "pow_node"
 version = { workspace = true }
 authors = { workspace = true }
 license = { workspace = true }
@@ -12,4 +12,4 @@ dotenv = { workspace = true }
 tokio = { workspace = true }
 log = { workspace = true }
 
-pow_chain_core = { workspace = true }
+pow_core = { workspace = true }

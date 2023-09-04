@@ -1,6 +1,6 @@
-# Prof of work blockchain in rust
+# Proof of work challenge-response server
 
-Simple blockchain implementation in rust with proof of work.
+Simple challenge-response server in rust with proof of work.
 
 **NOTE:** this project is just for learning purposes, it is not intended to be used in production.
 
@@ -31,13 +31,13 @@ docker-compose -f docker-compose.example.yml up --build --force-recreate --remov
 Run node:
 
 ```bash
-cargo run --bin pow_chain_node
+cargo run --bin pow_node
 ```
 
 Run client:
 
 ```bash
-cargo run --bin pow_chain_client
+cargo run --bin pow_client
 ```
 
 ## License

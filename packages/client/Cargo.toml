@@ -1,5 +1,5 @@
 [package]
-name = "pow_chain_client"
+name = "pow_client"
 version = { workspace = true }
 authors = { workspace = true }
 license = { workspace = true }
@@ -10,4 +10,4 @@ keywords = { workspace = true }
 [dependencies]
 dotenv = { workspace = true }
 
-pow_chain_core = { workspace = true }
+pow_core = { workspace = true }

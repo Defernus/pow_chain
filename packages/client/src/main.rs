@@ -1,4 +1,4 @@
-use pow_chain_core::update_log_level::update_log_level;
+use pow_core::update_log_level::update_log_level;
 
 pub fn main() {
     update_log_level();

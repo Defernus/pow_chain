@@ -1,5 +1,5 @@
 [package]
-name = "pow_chain_tests"
+name = "pow_tests"
 version = { workspace = true }
 authors = { workspace = true }
 license = { workspace = true }
@@ -8,4 +8,6 @@ repository = { workspace = true }
 keywords = { workspace = true }
 
 [dependencies]
-pow_chain_core = { workspace = true }
+pow_core = { workspace = true }
+pow_node = { workspace = true }
+pow_client = { workspace = true }
