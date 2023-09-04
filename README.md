@@ -8,6 +8,7 @@ Simple blockchain implementation in rust with proof of work.
 
 - install [rust](https://www.rust-lang.org/tools/install)
 - install [cargo make](https://docs.rs/crate/cargo-make/latest)
+- update .env file with your values (use .env.example as template)
 
 ## Tests
 

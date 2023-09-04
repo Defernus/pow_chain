@@ -8,4 +8,6 @@ repository = { workspace = true }
 keywords = { workspace = true }
 
 [dependencies]
+dotenv = { workspace = true }
+
 pow_chain_core = { workspace = true }
