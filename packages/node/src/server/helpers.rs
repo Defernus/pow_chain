@@ -1,10 +1,16 @@
-use std::{error::Error, fmt::Display, sync::Arc};
+use std::{borrow::BorrowMut, error::Error, fmt::Display, sync::Arc};
 
 use tokio::{io::AsyncWriteExt, net::TcpStream, sync::Mutex};
 
 use crate::config::Config;
 
-pub async fn send_err(socket: &mut TcpStream, err: impl Display) -> Result<(), Box<dyn Error>> {
+pub async fn send_err(
+    socket: Arc<Mutex<TcpStream>>,
+    err: impl Display,
+) -> Result<(), Box<dyn Error>> {
+    let mut lock = socket.lock().await;
+    let socket = lock.borrow_mut();
+
     socket
         .write_all(format!("ERROR\n{err}\n").as_bytes())
         .await?;
@@ -14,9 +20,12 @@ pub async fn send_err(socket: &mut TcpStream, err: impl Display) -> Result<(), B
 }
 
 pub async fn send_response(
-    socket: &mut TcpStream,
+    socket: Arc<Mutex<TcpStream>>,
     data: impl Display,
 ) -> Result<(), Box<dyn Error>> {
+    let mut lock = socket.lock().await;
+    let socket = lock.borrow_mut();
+
     socket.write_all(format!("OK\n{data}\n").as_bytes()).await?;
     socket.flush().await?;
 
@@ -27,7 +36,7 @@ pub async fn send_response(
 ///
 /// Returns `true` if max connections is reached.
 pub async fn add_connection(
-    socket: &mut TcpStream,
+    socket: Arc<Mutex<TcpStream>>,
     connections: Arc<Mutex<usize>>,
     cfg: &Config,
 ) -> Result<bool, Box<dyn Error>> {
@@ -37,8 +46,8 @@ pub async fn add_connection(
     if cfg.max_connections != 0 && *c > cfg.max_connections {
         log::warn!("max connections reached");
 
-        send_err(socket, "max connections reached").await?;
-        socket.shutdown().await?;
+        send_err(socket.clone(), "max connections reached").await?;
+        socket.lock().await.borrow_mut().shutdown().await?;
 
         return Ok(true);
     }

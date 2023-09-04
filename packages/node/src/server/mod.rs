@@ -1,13 +1,21 @@
 use std::{error::Error, sync::Arc};
 
-use tokio::{io::AsyncReadExt, net::TcpListener, sync::Mutex};
+use tokio::{
+    io::AsyncReadExt,
+    net::TcpListener,
+    sync::{mpsc, Mutex},
+};
 
 use crate::{
     config::Config,
-    server::helpers::{add_connection, send_err, send_response},
+    server::{
+        helpers::{add_connection, send_err},
+        router::start_router,
+    },
 };
 
 pub(self) mod helpers;
+pub(self) mod router;
 
 pub struct Server {
     listener: TcpListener,
@@ -29,11 +37,12 @@ impl Server {
         let connections: Arc<Mutex<usize>> = Arc::new(Mutex::new(0));
 
         loop {
-            let (mut socket, addr) = self.listener.accept().await?;
+            let (socket, addr) = self.listener.accept().await?;
 
             log::debug!("accepted connection from: {}", addr);
 
-            if add_connection(&mut socket, connections.clone(), cfg).await? {
+            let socket = Arc::new(Mutex::new(socket));
+            if add_connection(socket.clone(), connections.clone(), cfg).await? {
                 continue;
             }
 
@@ -42,14 +51,22 @@ impl Server {
             let connections = connections.clone();
 
             tokio::spawn(async move {
-                let mut buf = vec![0; max_body_size + 1];
+                let (tx, rx) = mpsc::channel::<Option<String>>(100);
 
+                let router_socket = socket.clone();
+                tokio::spawn(async move {
+                    start_router(router_socket, rx).await;
+                });
+
+                let mut buf = vec![0; max_body_size + 1];
                 loop {
-                    let size = match socket.read(&mut buf).await {
-                        Ok(n) => n,
-                        Err(e) => {
-                            log::error!("failed to read from socket: {:?}", e);
-                            break;
+                    let size = {
+                        match socket.lock().await.read(&mut buf).await {
+                            Ok(n) => n,
+                            Err(e) => {
+                                log::error!("failed to read from socket: {:?}", e);
+                                break;
+                            }
                         }
                     };
 
@@ -61,20 +78,25 @@ impl Server {
                         log::warn!("max body size reached");
                         *connections.lock().await -= 1;
 
-                        send_err(&mut socket, "max body size reached")
+                        send_err(socket.clone(), "max body size reached")
                             .await
                             .unwrap();
                         break;
                     }
 
                     let body = String::from_utf8_lossy(&buf[..size]).to_string();
-                    let lines = body.split('\n').collect::<Vec<_>>();
+                    let lines = body.split('\n').filter(|s| !s.is_empty());
 
-                    send_response(&mut socket, body).await.unwrap();
+                    for l in lines {
+                        tx.send(Some(l.to_string()))
+                            .await
+                            .map_err(|e| format!("{e}"))
+                            .unwrap();
+                    }
                 }
 
                 log::debug!("closing connection from: {}", addr);
-
+                tx.send(None).await.unwrap();
                 *connections.lock().await -= 1;
             });
         }
