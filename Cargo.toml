@@ -4,7 +4,7 @@ members = ["packages/common", "packages/node", "packages/client", "tests"]
 [workspace.package]
 version = "0.0.1"
 authors = ["Denis Lavrentev"]
-license = "GPL-3.0-or-later"
+license = "Apache-2.0-or-MIT"
 edition = "2021"
 repository = "https://github.com/defernus/pow_chain"
 keywords = ["blockchain", "pow", "prof of work"]

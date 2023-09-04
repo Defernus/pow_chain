@@ -24,3 +24,9 @@ Run one node and one client:
 ```bash
 docker-compose -f docker-compose.example.yml up --build --force-recreate --remove-orphans
 ```
+
+## License
+
+This project is distributed under the terms of both the MIT license and the Apache License (Version 2.0).
+
+See LICENSE-APACHE and LICENSE-MIT.
