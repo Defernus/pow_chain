@@ -17,6 +17,7 @@ use crate::{
 
 pub mod error;
 pub(self) mod helpers;
+pub mod responses;
 pub(self) mod router;
 
 pub struct Server {

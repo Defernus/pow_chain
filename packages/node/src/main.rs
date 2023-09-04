@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use pow_core::update_log_level::update_log_level;
+use pow_common::update_log_level::update_log_level;
 use pow_node::{config::Config, node::Node, server::Server};
 
 #[tokio::main]

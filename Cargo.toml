@@ -19,7 +19,7 @@ env_logger = "0.10.0"
 sha256 = "1.4.0"
 hex = "0.4.3"
 
-pow_core = { version = "0.0.1", path = "./packages/common" }
+pow_common = { version = "0.0.1", path = "./packages/common" }
 pow_tests = { version = "0.0.1", path = "./packages/tests" }
 pow_node = { version = "0.0.1", path = "./packages/node" }
 pow_client = { version = "0.0.1", path = "./packages/client" }

@@ -14,4 +14,4 @@ log = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
-pow_core = { workspace = true }
+pow_common = { workspace = true }

@@ -9,5 +9,8 @@ keywords = { workspace = true }
 
 [dependencies]
 dotenv = { workspace = true }
+log = { workspace = true }
+serde_json = { workspace = true }
 
-pow_core = { workspace = true }
+pow_common = { workspace = true }
+pow_node = { workspace = true }

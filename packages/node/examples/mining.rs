@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-use pow_core::hash::{hash_block_data, validate_hash};
+use pow_common::hash::{hash_block_data, validate_hash};
 use pow_node::{config::Config, node::Node};
 
 fn mine_block(cfg: &Config, node: &mut Node, data: String) {
@@ -25,7 +25,7 @@ fn mine_block(cfg: &Config, node: &mut Node, data: String) {
 
     let end_time = SystemTime::now();
 
-    println!(
+    log::info!(
         "block mined:\n\ttime {:?}\n\tnonce {}\n\tdifficulty: {}",
         end_time.duration_since(start_time).unwrap(),
         nonce,
@@ -37,7 +37,7 @@ fn main() {
     let cfg = Config::new();
     let mut node = Node::new("test node");
 
-    println!("start mining");
+    log::info!("start mining");
 
     let mut index = 0;
 

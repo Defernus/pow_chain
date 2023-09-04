@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, SystemTime};
 
-use pow_core::hash::{hash_block_data, validate_hash};
+use pow_common::hash::{hash_block_data, validate_hash};
 
 use super::error::{NodeError, NodeResult};
 

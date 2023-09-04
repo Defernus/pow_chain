@@ -8,6 +8,6 @@ repository = { workspace = true }
 keywords = { workspace = true }
 
 [dependencies]
-pow_core = { workspace = true }
+pow_common = { workspace = true }
 pow_node = { workspace = true }
 pow_client = { workspace = true }

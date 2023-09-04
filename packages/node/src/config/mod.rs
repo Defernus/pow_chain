@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use dotenv::dotenv;
-use pow_core::{
+use pow_common::{
     constants::{
         DEFAULT_BLOCK_DURATION_SEC, DEFAULT_DIFFICULTY_UPDATE_CAP, DEFAULT_MAX_BODY_SIZE,
         DEFAULT_MAX_CONNECTIONS, DEFAULT_NODE_PORT, DEFAULT_UPDATE_DIFFICULTY_INTERVAL,

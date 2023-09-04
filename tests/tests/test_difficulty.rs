@@ -1,4 +1,4 @@
-use pow_core::hash::{validate_hash, zeros_amount};
+use pow_common::hash::{validate_hash, zeros_amount};
 
 #[test]
 fn test_leading_zeros() {

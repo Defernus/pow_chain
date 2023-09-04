@@ -1,37 +1,35 @@
-use std::{borrow::BorrowMut, error::Error, fmt::Display, sync::Arc};
+use std::{borrow::BorrowMut, error::Error, sync::Arc};
 
+use serde::Serialize;
 use tokio::{io::AsyncWriteExt, net::TcpStream, sync::Mutex};
 
 use crate::config::Config;
 
-use super::error::ServerError;
+use super::error::{ServerError, ServerResult};
 
-pub async fn send_err(
+pub async fn send_response<T>(
     socket: Arc<Mutex<TcpStream>>,
-    err: ServerError,
-) -> Result<(), Box<dyn Error>> {
+    data: &ServerResult<T>,
+) -> Result<(), Box<dyn Error>>
+where
+    T: Serialize,
+{
     let mut lock = socket.lock().await;
     let socket = lock.borrow_mut();
 
-    let err = serde_json::to_string(&err).unwrap();
+    let msg = serde_json::to_string(data)?;
 
-    socket
-        .write_all(format!("ERROR\n{}\n", err).as_bytes())
-        .await?;
+    socket.write_all(msg.as_bytes()).await?;
     socket.flush().await?;
 
     Ok(())
 }
 
-pub async fn send_response(
+pub async fn send_err(
     socket: Arc<Mutex<TcpStream>>,
-    data: impl Display,
+    err: ServerError,
 ) -> Result<(), Box<dyn Error>> {
-    let mut lock = socket.lock().await;
-    let socket = lock.borrow_mut();
-
-    socket.write_all(format!("OK\n{data}\n").as_bytes()).await?;
-    socket.flush().await?;
+    send_response::<u8>(socket, &Err(err)).await?;
 
     Ok(())
 }

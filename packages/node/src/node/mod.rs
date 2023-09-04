@@ -57,6 +57,8 @@ impl Node {
             self.update_difficulty(cfg);
         }
 
+        log::info!("block mined: {block:?}");
+
         self.blocks.push(block);
 
         Ok(self.get_highest_block())

@@ -1,5 +1,5 @@
 [package]
-name = "pow_core"
+name = "pow_common"
 version = { workspace = true }
 authors = { workspace = true }
 license = { workspace = true }

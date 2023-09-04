@@ -1,7 +1,6 @@
-use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use pow_core::constants::{
+use pow_common::constants::{
     ROUTE_ADD_BLOCK, ROUTE_GET_BLOCK, ROUTE_GET_DIFFICULTY, ROUTE_GET_HIGHEST_BLOCK,
 };
 use tokio::{
@@ -12,16 +11,12 @@ use tokio::{
 use crate::{
     config::Config,
     node::{block::Block, Node},
-    server::{error::ServerError, helpers::send_response},
+    server::{
+        error::{ServerError, ServerResult},
+        helpers::{send_err, send_response},
+        responses::HighestBlockResponse,
+    },
 };
-
-use super::{error::ServerResult, helpers::send_err};
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Deserialize, Serialize)]
-pub struct HighestBlockResponse {
-    pub block: Block,
-    pub height: usize,
-}
 
 pub struct Router {
     cfg: Arc<Config>,
@@ -63,11 +58,18 @@ impl Router {
             return false;
         };
 
-        let response = match command.as_str() {
-            ROUTE_GET_BLOCK => self.route_get_block().await,
-            ROUTE_GET_DIFFICULTY => self.route_get_difficulty().await,
-            ROUTE_GET_HIGHEST_BLOCK => self.route_get_highest_block().await,
-            ROUTE_ADD_BLOCK => self.route_add_block().await,
+        // wait 1 second
+        tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+
+        match command.as_str() {
+            ROUTE_GET_BLOCK => resp(self.socket.clone(), self.route_get_block().await).await,
+            ROUTE_GET_DIFFICULTY => {
+                resp(self.socket.clone(), self.route_get_difficulty().await).await
+            }
+            ROUTE_GET_HIGHEST_BLOCK => {
+                resp(self.socket.clone(), self.route_get_highest_block().await).await
+            }
+            ROUTE_ADD_BLOCK => resp(self.socket.clone(), self.route_add_block().await).await,
             _ => {
                 log::debug!("unknown command: {}", command);
 
@@ -75,23 +77,12 @@ impl Router {
                     .await
                     .unwrap();
 
-                return false;
-            }
-        };
-
-        match response {
-            Ok(response) => {
-                send_response(self.socket.clone(), response).await.unwrap();
-                true
-            }
-            Err(err) => {
-                send_err(self.socket.clone(), err).await.unwrap();
                 false
             }
         }
     }
 
-    async fn route_get_block(&mut self) -> ServerResult<String> {
+    async fn route_get_block(&mut self) -> ServerResult<Block> {
         let block_height = self.next_msg().await.unwrap();
         let block_height =
             block_height
@@ -105,31 +96,32 @@ impl Router {
 
         let block = node.get_block(block_height)?;
 
-        Ok(serde_json::to_string(block).unwrap())
+        Ok(block.clone())
     }
 
-    async fn route_get_difficulty(&mut self) -> ServerResult<String> {
+    async fn route_get_difficulty(&mut self) -> ServerResult<f64> {
         let node: tokio::sync::MutexGuard<'_, Node> = self.node.lock().await;
 
         let difficulty = node.get_difficulty();
 
-        Ok(difficulty.to_string())
+        Ok(difficulty)
     }
 
-    async fn route_get_highest_block(&mut self) -> ServerResult<String> {
+    async fn route_get_highest_block(&mut self) -> ServerResult<HighestBlockResponse> {
         let node: tokio::sync::MutexGuard<'_, Node> = self.node.lock().await;
 
         let highest_block = node.get_highest_block();
         let height = node.get_height();
+        let difficulty = node.get_difficulty();
 
-        Ok(serde_json::to_string(&HighestBlockResponse {
+        Ok(HighestBlockResponse {
             block: highest_block.clone(),
             height,
+            difficulty,
         })
-        .unwrap())
     }
 
-    async fn route_add_block(&mut self) -> ServerResult<String> {
+    async fn route_add_block(&mut self) -> ServerResult<HighestBlockResponse> {
         let data = self.next_msg().await.unwrap();
         let nonce = self.next_msg().await.unwrap();
         let nonce = nonce
@@ -143,7 +135,21 @@ impl Router {
 
         let block = node.add_block(&self.cfg, data, nonce)?.clone();
         let height = node.get_height();
+        let difficulty = node.get_difficulty();
 
-        Ok(serde_json::to_string(&HighestBlockResponse { block, height }).unwrap())
+        Ok(HighestBlockResponse {
+            block,
+            height,
+            difficulty,
+        })
     }
+}
+
+async fn resp<T>(socket: Arc<Mutex<TcpStream>>, data: ServerResult<T>) -> bool
+where
+    T: serde::Serialize,
+{
+    send_response(socket, &data).await.unwrap();
+
+    data.is_ok()
 }
